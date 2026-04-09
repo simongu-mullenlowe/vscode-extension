@@ -15,7 +15,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:markdown",
+    "onStartupFinished",
     "onView:footnoteHighlight.list",
     "onView:footnoteHighlight.aria",
     "onView:footnoteHighlight.alt"
