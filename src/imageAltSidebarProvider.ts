@@ -17,8 +17,8 @@ export class ImageAltSidebarProvider implements vscode.TreeDataProvider<AltTreeI
   private items: AltTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
-    // `footnoteHighlight.alt` 对应 package.json 里的 view id。
-    this.treeView = vscode.window.createTreeView("footnoteHighlight.alt", {
+    // `aplInspector.imageAlts` 对应 package.json 里的 view id。
+    this.treeView = vscode.window.createTreeView("aplInspector.imageAlts", {
       treeDataProvider: this,
       showCollapseAll: false,
     });
@@ -77,7 +77,7 @@ export class ImageAltSidebarProvider implements vscode.TreeDataProvider<AltTreeI
       `**alt** (${entry.kind}): ${escapeMd(entry.value)}\n\nL${entry.line + 1}`
     );
     item.command = {
-      command: "footnoteHighlight.reveal",
+      command: "aplInspector.reveal",
       title: "跳转",
       arguments: [
         document.uri.toString(),

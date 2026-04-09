@@ -21,8 +21,8 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
   private rootItems: FootnoteTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
-    // `footnoteHighlight.list` 对应 package.json 里的 view id。
-    this.treeView = vscode.window.createTreeView("footnoteHighlight.list", {
+    // `aplInspector.footnotes` 对应 package.json 里的 view id。
+    this.treeView = vscode.window.createTreeView("aplInspector.footnotes", {
       treeDataProvider: this,
       showCollapseAll: true,
     });
@@ -187,9 +187,9 @@ function truncate(s: string, max: number): string {
 }
 
 function revealCommand(uri: vscode.Uri, range: vscode.Range): vscode.Command {
-  // 统一用 `footnoteHighlight.reveal`，避免每个条目重复写 open/reveal/select 逻辑。
+  // 统一用 `aplInspector.reveal`，避免每个条目重复写 open/reveal/select 逻辑。
   return {
-    command: "footnoteHighlight.reveal",
+    command: "aplInspector.reveal",
     title: "跳转",
     arguments: [
       uri.toString(),

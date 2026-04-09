@@ -25,7 +25,7 @@ export class VisibilitySidebarProvider
   private visibleItems: VisibilityTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
-    this.treeView = vscode.window.createTreeView("footnoteHighlight.visibility", {
+    this.treeView = vscode.window.createTreeView("aplInspector.visibility", {
       treeDataProvider: this,
       showCollapseAll: true,
     });
@@ -102,7 +102,7 @@ export class VisibilitySidebarProvider
       `**${entry.kind.toUpperCase()}**: ${escapeMd(entry.reason)}\n\nL${entry.line + 1}`
     );
     item.command = {
-      command: "footnoteHighlight.reveal",
+      command: "aplInspector.reveal",
       title: "跳转",
       arguments: [
         document.uri.toString(),

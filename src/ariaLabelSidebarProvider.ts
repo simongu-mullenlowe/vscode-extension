@@ -21,8 +21,8 @@ export class AriaLabelSidebarProvider
   private items: AriaTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
-    // `footnoteHighlight.aria` 对应 package.json 里的 view id。
-    this.treeView = vscode.window.createTreeView("footnoteHighlight.aria", {
+    // `aplInspector.ariaLabels` 对应 package.json 里的 view id。
+    this.treeView = vscode.window.createTreeView("aplInspector.ariaLabels", {
       treeDataProvider: this,
       showCollapseAll: false,
     });
@@ -81,7 +81,7 @@ export class AriaLabelSidebarProvider
     // tooltip 用 MarkdownString，且对内容转义，避免特殊字符破坏渲染。
     item.tooltip = new vscode.MarkdownString(`**aria-label**: ${escapeMd(entry.value)}\n\nL${entry.line + 1}`);
     item.command = {
-      command: "footnoteHighlight.reveal",
+      command: "aplInspector.reveal",
       title: "跳转",
       arguments: [
         document.uri.toString(),

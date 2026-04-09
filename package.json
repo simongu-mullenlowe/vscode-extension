@@ -2,7 +2,7 @@
   "name": "vscode-footnote-highlight",
   "displayName": "APL Inspector",
   "description": "页面辅助检查面板：HTML 脚注、ARIA labels、图片 ALT、Hidden/Visible 快速定位（像素风 APL）。",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "SimonGu",
   "license": "MIT",
   "homepage": "https://github.com/simongu-mullenlowe/vscode-extension#readme",
@@ -31,41 +31,41 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onView:footnoteHighlight.list",
-    "onView:footnoteHighlight.aria",
-    "onView:footnoteHighlight.alt",
-    "onView:footnoteHighlight.visibility"
+    "onView:aplInspector.footnotes",
+    "onView:aplInspector.ariaLabels",
+    "onView:aplInspector.imageAlts",
+    "onView:aplInspector.visibility"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "footnoteHighlight",
+          "id": "aplInspector",
           "title": "APL",
           "icon": "media/footnote.svg"
         }
       ]
     },
     "views": {
-      "footnoteHighlight": [
+      "aplInspector": [
         {
-          "id": "footnoteHighlight.list",
+          "id": "aplInspector.footnotes",
           "name": "脚注列表",
           "contextualTitle": "脚注"
         },
         {
-          "id": "footnoteHighlight.aria",
+          "id": "aplInspector.ariaLabels",
           "name": "ARIA Labels",
           "contextualTitle": "ARIA"
         },
         {
-          "id": "footnoteHighlight.alt",
+          "id": "aplInspector.imageAlts",
           "name": "Image Alts",
           "contextualTitle": "ALT"
         },
         {
-          "id": "footnoteHighlight.visibility",
+          "id": "aplInspector.visibility",
           "name": "Hidden / Visible",
           "contextualTitle": "Visibility"
         }
@@ -74,60 +74,60 @@
     "menus": {
       "view/title": [
         {
-          "command": "footnoteHighlight.refresh",
-          "when": "view == footnoteHighlight.list",
+          "command": "aplInspector.refresh",
+          "when": "view == aplInspector.footnotes",
           "group": "navigation"
         },
         {
-          "command": "footnoteHighlight.refresh",
-          "when": "view == footnoteHighlight.aria",
+          "command": "aplInspector.refresh",
+          "when": "view == aplInspector.ariaLabels",
           "group": "navigation"
         },
         {
-          "command": "footnoteHighlight.refresh",
-          "when": "view == footnoteHighlight.alt",
+          "command": "aplInspector.refresh",
+          "when": "view == aplInspector.imageAlts",
           "group": "navigation"
         },
         {
-          "command": "footnoteHighlight.refresh",
-          "when": "view == footnoteHighlight.visibility",
+          "command": "aplInspector.refresh",
+          "when": "view == aplInspector.visibility",
           "group": "navigation"
         }
       ],
       "commandPalette": [
         {
-          "command": "footnoteHighlight.reveal",
+          "command": "aplInspector.reveal",
           "when": "false"
         }
       ]
     },
     "configuration": {
-      "title": "Footnote Highlight",
+      "title": "APL Inspector",
       "properties": {
-        "footnoteHighlight.enabled": {
+        "aplInspector.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "是否在 Markdown 中启用脚注高亮。"
+          "description": "是否启用 APL Inspector 的高亮与侧栏功能。"
         },
-        "footnoteHighlight.mode": {
+        "aplInspector.mode": {
           "type": "string",
           "enum": ["focus", "all"],
           "default": "focus",
-          "description": "高亮模式：focus=光标停在哪个脚注就只高亮该组；all=高亮全篇所有脚注。"
+          "description": "脚注高亮模式：focus=光标命中脚注时只高亮该组；all=高亮全部脚注。"
         }
       }
     },
     "commands": [
       {
-        "command": "footnoteHighlight.refresh",
+        "command": "aplInspector.refresh",
         "title": "刷新",
-        "category": "脚注",
+        "category": "APL Inspector",
         "icon": "$(refresh)"
       },
       {
-        "command": "footnoteHighlight.reveal",
+        "command": "aplInspector.reveal",
         "title": "跳转到脚注位置",
-        "category": "脚注"
+        "category": "APL Inspector"
       }
     ]
   },

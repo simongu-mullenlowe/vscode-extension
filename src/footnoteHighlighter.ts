@@ -26,7 +26,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
   }
 
   activate(context: vscode.ExtensionContext): void {
-    const config = vscode.workspace.getConfiguration("footnoteHighlight");
+    const config = vscode.workspace.getConfiguration("aplInspector");
     if (!config.get<boolean>("enabled", true)) {
       return;
     }
@@ -45,7 +45,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
         }
       }),
       vscode.workspace.onDidChangeConfiguration((e) => {
-        if (e.affectsConfiguration("footnoteHighlight")) {
+        if (e.affectsConfiguration("aplInspector")) {
           this.applyToActiveEditor();
         }
       }),
@@ -67,7 +67,8 @@ export class FootnoteHighlighter implements vscode.Disposable {
     }
 
     const config = vscode.workspace.getConfiguration("footnoteHighlight");
-    const mode = config.get<"focus" | "all">("mode", "focus");
+    const cfg = vscode.workspace.getConfiguration("aplInspector");
+    const mode = cfg.get<"focus" | "all">("mode", "focus");
     const entries = parseFootnoteModel(editor.document);
     if (entries.length === 0) {
       this.clearDecorations();

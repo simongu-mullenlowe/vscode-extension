@@ -19,6 +19,12 @@ let altSidebar: ImageAltSidebarProvider | undefined;
 let visibilitySidebar: VisibilitySidebarProvider | undefined;
 
 export function activate(context: vscode.ExtensionContext): void {
+  // 允许全局开关：关闭时不注册任何监听/视图刷新（减少干扰）。
+  const cfg = vscode.workspace.getConfiguration("aplInspector");
+  if (!cfg.get<boolean>("enabled", true)) {
+    return;
+  }
+
   highlighter = new FootnoteHighlighter();
   highlighter.activate(context);
 
@@ -28,7 +34,7 @@ export function activate(context: vscode.ExtensionContext): void {
   visibilitySidebar = new VisibilitySidebarProvider(context);
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("footnoteHighlight.refresh", () => {
+    vscode.commands.registerCommand("aplInspector.refresh", () => {
       highlighter?.refresh();
       sidebar?.refresh();
       ariaSidebar?.refresh();
@@ -36,7 +42,7 @@ export function activate(context: vscode.ExtensionContext): void {
       visibilitySidebar?.refresh();
     }),
     vscode.commands.registerCommand(
-      "footnoteHighlight.reveal",
+      "aplInspector.reveal",
       async (
         uriStr: string,
         start: { line: number; character: number },
