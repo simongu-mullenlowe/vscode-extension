@@ -13,7 +13,8 @@
   "activationEvents": [
     "onLanguage:markdown",
     "onView:footnoteHighlight.list",
-    "onView:footnoteHighlight.aria"
+    "onView:footnoteHighlight.aria",
+    "onView:footnoteHighlight.alt"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -37,6 +38,11 @@
           "id": "footnoteHighlight.aria",
           "name": "ARIA Labels",
           "contextualTitle": "ARIA"
+        },
+        {
+          "id": "footnoteHighlight.alt",
+          "name": "Image Alts",
+          "contextualTitle": "ALT"
         }
       ]
     },
@@ -50,6 +56,11 @@
         {
           "command": "footnoteHighlight.refresh",
           "when": "view == footnoteHighlight.aria",
+          "group": "navigation"
+        },
+        {
+          "command": "footnoteHighlight.refresh",
+          "when": "view == footnoteHighlight.alt",
           "group": "navigation"
         }
       ],

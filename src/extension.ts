@@ -3,6 +3,7 @@ import { FootnoteHighlighter } from "./footnoteHighlighter";
 import { FootnoteSidebarProvider } from "./footnoteSidebarProvider";
 import { parseFootnoteModel } from "./footnoteModel";
 import { AriaLabelSidebarProvider } from "./ariaLabelSidebarProvider";
+import { ImageAltSidebarProvider } from "./imageAltSidebarProvider";
 
 /**
  * 扩展入口：
@@ -13,6 +14,7 @@ import { AriaLabelSidebarProvider } from "./ariaLabelSidebarProvider";
 let highlighter: FootnoteHighlighter | undefined;
 let sidebar: FootnoteSidebarProvider | undefined;
 let ariaSidebar: AriaLabelSidebarProvider | undefined;
+let altSidebar: ImageAltSidebarProvider | undefined;
 
 export function activate(context: vscode.ExtensionContext): void {
   highlighter = new FootnoteHighlighter();
@@ -20,12 +22,14 @@ export function activate(context: vscode.ExtensionContext): void {
 
   sidebar = new FootnoteSidebarProvider(context);
   ariaSidebar = new AriaLabelSidebarProvider(context);
+  altSidebar = new ImageAltSidebarProvider(context);
 
   context.subscriptions.push(
     vscode.commands.registerCommand("footnoteHighlight.refresh", () => {
       highlighter?.refresh();
       sidebar?.refresh();
       ariaSidebar?.refresh();
+      altSidebar?.refresh();
     }),
     vscode.commands.registerCommand(
       "footnoteHighlight.reveal",
@@ -76,6 +80,8 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate(): void {
+  altSidebar?.dispose();
+  altSidebar = undefined;
   ariaSidebar?.dispose();
   ariaSidebar = undefined;
   sidebar?.dispose();
