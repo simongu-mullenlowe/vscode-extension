@@ -1,8 +1,8 @@
 {
   "name": "vscode-footnote-highlight",
-  "displayName": "Footnote Highlight",
-  "description": "高亮脚注引用与定义，体验类似 Safari 脚注插件。",
-  "version": "0.0.3",
+  "displayName": "APL Inspector",
+  "description": "页面辅助检查面板：HTML 脚注、ARIA labels、图片 ALT、Hidden/Visible 快速定位（像素风 APL）。",
+  "version": "0.0.4",
   "publisher": "SimonGu",
   "license": "MIT",
   "homepage": "https://github.com/simongu-mullenlowe/vscode-extension#readme",
@@ -15,8 +15,10 @@
     "accessibility",
     "aria-label",
     "alt",
-    "visibility"
+    "visibility",
+    "inspector"
   ],
+  "icon": "media/icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/simongu-mullenlowe/vscode-extension.git"
@@ -40,7 +42,7 @@
       "activitybar": [
         {
           "id": "footnoteHighlight",
-          "title": "脚注",
+          "title": "APL",
           "icon": "media/footnote.svg"
         }
       ]
@@ -133,7 +135,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "package": "vsce package --allow-missing-repository --skip-license"
+    "gen:icon": "node tools/gen_icon_png.mjs",
+    "package": "npm run gen:icon && vsce package --allow-missing-repository --skip-license"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

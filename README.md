@@ -1,8 +1,8 @@
-# Footnote Highlight (VS Code Extension)
+# APL Inspector (VS Code Extension)
 
-一个用于 **HTML 脚注**与 **可访问性文本（ARIA/ALT）**快速定位的 VS Code 扩展（也兼容 Markdown 风格脚注）。
+一个用于页面代码快速定位的 VS Code 扩展侧栏面板，包含 **HTML 脚注**、**ARIA labels**、**图片 ALT**、**Hidden/Visible** 等检查能力（也兼容 Markdown 风格脚注）。
 
-An extension for quickly navigating **HTML footnotes** and accessibility text (**ARIA/ALT**) in VS Code (also supports Markdown-style footnotes).
+A VS Code sidebar inspector for quickly navigating page code signals such as **HTML footnotes**, **ARIA labels**, **image ALT**, and **Hidden/Visible** markers (also supports Markdown-style footnotes).
 
 ## 功能
 
