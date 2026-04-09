@@ -2,8 +2,21 @@
   "name": "vscode-footnote-highlight",
   "displayName": "Footnote Highlight",
   "description": "高亮脚注引用与定义，体验类似 Safari 脚注插件。",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "SimonGu",
+  "license": "MIT",
+  "homepage": "https://github.com/simongu-mullenlowe/vscode-extension#readme",
+  "bugs": {
+    "url": "https://github.com/simongu-mullenlowe/vscode-extension/issues"
+  },
+  "keywords": [
+    "footnote",
+    "html",
+    "accessibility",
+    "aria-label",
+    "alt",
+    "visibility"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/simongu-mullenlowe/vscode-extension.git"
