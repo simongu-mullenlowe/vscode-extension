@@ -12,7 +12,8 @@
   ],
   "activationEvents": [
     "onLanguage:markdown",
-    "onView:footnoteHighlight.list"
+    "onView:footnoteHighlight.list",
+    "onView:footnoteHighlight.aria"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -31,6 +32,11 @@
           "id": "footnoteHighlight.list",
           "name": "脚注列表",
           "contextualTitle": "脚注"
+        },
+        {
+          "id": "footnoteHighlight.aria",
+          "name": "ARIA Labels",
+          "contextualTitle": "ARIA"
         }
       ]
     },
@@ -39,6 +45,11 @@
         {
           "command": "footnoteHighlight.refresh",
           "when": "view == footnoteHighlight.list",
+          "group": "navigation"
+        },
+        {
+          "command": "footnoteHighlight.refresh",
+          "when": "view == footnoteHighlight.aria",
           "group": "navigation"
         }
       ],

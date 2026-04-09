@@ -2,20 +2,24 @@ import * as vscode from "vscode";
 import { FootnoteHighlighter } from "./footnoteHighlighter";
 import { FootnoteSidebarProvider } from "./footnoteSidebarProvider";
 import { parseFootnoteModel } from "./footnoteModel";
+import { AriaLabelSidebarProvider } from "./ariaLabelSidebarProvider";
 
 let highlighter: FootnoteHighlighter | undefined;
 let sidebar: FootnoteSidebarProvider | undefined;
+let ariaSidebar: AriaLabelSidebarProvider | undefined;
 
 export function activate(context: vscode.ExtensionContext): void {
   highlighter = new FootnoteHighlighter();
   highlighter.activate(context);
 
   sidebar = new FootnoteSidebarProvider(context);
+  ariaSidebar = new AriaLabelSidebarProvider(context);
 
   context.subscriptions.push(
     vscode.commands.registerCommand("footnoteHighlight.refresh", () => {
       highlighter?.refresh();
       sidebar?.refresh();
+      ariaSidebar?.refresh();
     }),
     vscode.commands.registerCommand(
       "footnoteHighlight.reveal",
@@ -64,6 +68,8 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate(): void {
+  ariaSidebar?.dispose();
+  ariaSidebar = undefined;
   sidebar?.dispose();
   sidebar = undefined;
   highlighter?.dispose();
