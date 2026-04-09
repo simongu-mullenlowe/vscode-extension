@@ -3,7 +3,7 @@
   "displayName": "Footnote Highlight",
   "description": "高亮脚注引用与定义，体验类似 Safari 脚注插件。",
   "version": "0.0.2",
-  "publisher": "local",
+  "publisher": "SimonGu",
   "repository": {
     "type": "git",
     "url": "https://github.com/simongu-mullenlowe/vscode-extension.git"
