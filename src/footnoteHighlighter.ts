@@ -66,7 +66,6 @@ export class FootnoteHighlighter implements vscode.Disposable {
       return;
     }
 
-    const config = vscode.workspace.getConfiguration("footnoteHighlight");
     const cfg = vscode.workspace.getConfiguration("aplInspector");
     const mode = cfg.get<"focus" | "all">("mode", "focus");
     const entries = parseFootnoteModel(editor.document);

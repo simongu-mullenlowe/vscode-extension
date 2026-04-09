@@ -61,15 +61,15 @@ English:
 ### Hidden / Visible
 
 - **侧栏按 Hidden / Visible 分组**列出当前文件里常见的“隐藏/可见”标记（静态扫描，便于定位）：
-  - Hidden：`hidden`、`aria-hidden="true"`、`display:none`、`visibility:hidden`、`opacity:0`
-  - Visible：`aria-hidden="false"`、`display:block/inline/flex/grid`、`visibility:visible`、`opacity:1`
+  - Hidden：`class="visuallyhidden"` / `visually-hidden` / `sr-only`、`hidden`、`display:none`、`visibility:hidden`、`opacity:0`
+  - Visible：`display:block/inline/flex/grid`、`visibility:visible`、`opacity:1`
 - 点击条目跳转并选中对应片段。
 
 English:
 
 - Groups common visibility markers found in the current file (static scan for quick navigation):
-  - Hidden: `hidden`, `aria-hidden="true"`, `display:none`, `visibility:hidden`, `opacity:0`
-  - Visible: `aria-hidden="false"`, `display:block/inline/flex/grid`, `visibility:visible`, `opacity:1`
+  - Hidden: `class="visuallyhidden"` / `visually-hidden` / `sr-only`, `hidden`, `display:none`, `visibility:hidden`, `opacity:0`
+  - Visible: `display:block/inline/flex/grid`, `visibility:visible`, `opacity:1`
 - Click an item to jump and select the matched snippet.
 
 ## 使用
@@ -81,7 +81,7 @@ English:
 - **Image Alts**：展示图片 `alt` 列表
 - **Hidden / Visible**：展示隐藏/可见标记分组
 
-右上角支持 **刷新**（命令：`脚注: 刷新`）。
+右上角支持 **刷新**（命令：`APL Inspector: 刷新`）。
 
 English:
 
@@ -92,23 +92,23 @@ After installing, a **Footnote** icon appears in the Activity Bar:
 - **Image Alts**: image `alt` list
 - **Hidden / Visible**: grouped visibility markers
 
-Use **Refresh** (command: `脚注: 刷新`) from the view title actions.
+Use **Refresh** (command: `APL Inspector: 刷新`) from the view title actions.
 
 ## 配置
 
-在设置中搜索 `Footnote Highlight`：
+在设置中搜索 `APL Inspector`：
 
-- `footnoteHighlight.enabled`：是否启用
-- `footnoteHighlight.mode`：
+- `aplInspector.enabled`：是否启用
+- `aplInspector.mode`：
   - `focus`：光标命中脚注时，仅高亮该组
   - `all`：高亮全文所有脚注引用/定义标签
 
 English:
 
-Search `Footnote Highlight` in Settings:
+Search `APL Inspector` in Settings:
 
-- `footnoteHighlight.enabled`: enable/disable
-- `footnoteHighlight.mode`:
+- `aplInspector.enabled`: enable/disable
+- `aplInspector.mode`:
   - `focus`: highlight only the current footnote group under cursor
   - `all`: highlight all footnotes in the document
 
