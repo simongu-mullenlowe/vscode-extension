@@ -50,7 +50,8 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
   private updateMessage(): void {
     const editor = vscode.window.activeTextEditor;
     if (!editor || editor.document.languageId !== "markdown") {
-      this.treeView.message = "打开 Markdown 文件后，此处会列出脚注引用与定义，点击可跳转。";
+      this.treeView.message =
+        "脚注列表仅支持 Markdown（.md）。打开 .md 后这里会列出 [^id] 与 [^id]:，点击可跳转。";
       return;
     }
     const entries = parseFootnoteModel(editor.document);
@@ -88,10 +89,11 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
       const { entry, document } = element;
       const hasDef = Boolean(entry.definitionLabelRange);
       const refCount = entry.references.length;
+      const childCount = refCount + (hasDef ? 1 : 0);
       const item = new vscode.TreeItem(
         `[^${entry.label}]`,
-        refCount + (hasDef ? 1 : 0) > 1
-          ? vscode.TreeItemCollapsibleState.Expanded
+        childCount > 1
+          ? vscode.TreeItemCollapsibleState.Collapsed
           : vscode.TreeItemCollapsibleState.None
       );
       item.description = entry.definitionBody
