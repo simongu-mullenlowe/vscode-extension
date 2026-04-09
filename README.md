@@ -137,3 +137,15 @@ English:
 
 The generated `.vsix` can be installed via “Install from VSIX…” in VS Code/Cursor.
 
+## 作者与反馈
+
+- 作者：**Simon Gu**
+- 建议/反馈：`simon.gu@mullenlowe.com`
+
+English:
+
+## Author & Feedback
+
+- Author: **Simon Gu**
+- Suggestions/feedback: `simon.gu@mullenlowe.com`
+
