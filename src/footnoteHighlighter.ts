@@ -61,7 +61,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
 
   private applyToActiveEditor(): void {
     const editor = vscode.window.activeTextEditor;
-    if (!editor || editor.document.languageId !== "markdown") {
+    if (!editor) {
       this.clearDecorations();
       return;
     }
@@ -69,6 +69,10 @@ export class FootnoteHighlighter implements vscode.Disposable {
     const config = vscode.workspace.getConfiguration("footnoteHighlight");
     const mode = config.get<"focus" | "all">("mode", "focus");
     const entries = parseFootnoteModel(editor.document);
+    if (entries.length === 0) {
+      this.clearDecorations();
+      return;
+    }
 
     if (mode === "all") {
       // 全量高亮：直接展平 ranges。

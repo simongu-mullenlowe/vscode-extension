@@ -49,14 +49,15 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
 
   private updateMessage(): void {
     const editor = vscode.window.activeTextEditor;
-    if (!editor || editor.document.languageId !== "markdown") {
+    if (!editor) {
       this.treeView.message =
-        "脚注列表仅支持 Markdown（.md）。打开 .md 后这里会列出 [^id] 与 [^id]:，点击可跳转。";
+        "打开文件后，此处会列出脚注引用与定义（HTML: href=\"#fn...\" / id=\"fn...\"；Markdown: [^id]）。点击可跳转。";
       return;
     }
     const entries = parseFootnoteModel(editor.document);
     if (entries.length === 0) {
-      this.treeView.message = "当前文档未发现 [^脚注] 或 [^脚注]: 定义。";
+      this.treeView.message =
+        "当前文档未发现脚注（HTML: href=\"#fn...\" / id=\"fn...\"；Markdown: [^id] / [^id]:）。";
     } else {
       this.treeView.message = undefined;
     }
@@ -73,7 +74,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
 
   private rebuildCache(): void {
     const editor = vscode.window.activeTextEditor;
-    if (!editor || editor.document.languageId !== "markdown") {
+    if (!editor) {
       this.rootItems = [];
       return;
     }
@@ -144,7 +145,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
 
   getChildren(element?: FootnoteTreeItem): FootnoteTreeItem[] {
     const editor = vscode.window.activeTextEditor;
-    if (!editor || editor.document.languageId !== "markdown") {
+    if (!editor) {
       return [];
     }
     const document = editor.document;

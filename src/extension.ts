@@ -64,9 +64,6 @@ export function activate(context: vscode.ExtensionContext): void {
         return;
       }
       const editor = e.textEditor;
-      if (editor.document.languageId !== "markdown") {
-        return;
-      }
       const pos = editor.selection.active;
       const entries = parseFootnoteModel(editor.document);
       // focus 联动：如果光标停在某个 `[^id]` 或 `[^id]:` 上，则侧栏自动定位到该脚注条目。
