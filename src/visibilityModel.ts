@@ -16,7 +16,7 @@ const MAX_SCAN_CHARS = 800_000;
 
 /**
  * 扫描当前文档中常见的“隐藏/可见”信号：
- * - HTML/JSX 属性：hidden、aria-hidden="true/false"
+ * - HTML/JSX 属性：hidden
  * - CSS class：visuallyhidden / visually-hidden / sr-only（常见“视觉隐藏但可读”）
  * - inline style：display:none、visibility:hidden、opacity:0（常用于隐藏）
  *
@@ -33,15 +33,7 @@ export function parseVisibilityMarkers(document: vscode.TextDocument): Visibilit
   const hiddenAttr = /\bhidden\b/g;
   pushAll(hiddenAttr, "hidden", "attribute: hidden");
 
-  // 2) aria-hidden 字面量 true/false（HTML 与 JSX 字面量包裹）
-  pushAll(/\baria-hidden\s*=\s*"true"/g, "hidden", 'aria-hidden="true"');
-  pushAll(/\baria-hidden\s*=\s*'true'/g, "hidden", "aria-hidden='true'");
-  pushAll(/\baria-hidden\s*=\s*\{\s*true\s*\}/g, "hidden", "aria-hidden={true}");
-  pushAll(/\baria-hidden\s*=\s*"false"/g, "visible", 'aria-hidden="false"');
-  pushAll(/\baria-hidden\s*=\s*'false'/g, "visible", "aria-hidden='false'");
-  pushAll(/\baria-hidden\s*=\s*\{\s*false\s*\}/g, "visible", "aria-hidden={false}");
-
-  // 3) visually hidden class（常见可访问性写法）
+  // 2) visually hidden class（常见可访问性写法）
   // 支持：class="... visuallyhidden ..." / class='... visually-hidden ...' / class={"..."}
   // 这里不做完整 class 解析，只做足够稳定的静态定位。
   pushAll(
@@ -75,7 +67,7 @@ export function parseVisibilityMarkers(document: vscode.TextDocument): Visibilit
     "className: sr-only"
   );
 
-  // 4) inline style 常见隐藏信号（HTML/JSX 字面量）
+  // 3) inline style 常见隐藏信号（HTML/JSX 字面量）
   // display:none
   pushAll(/\bdisplay\s*:\s*none\b/g, "hidden", "style: display:none");
   // visibility:hidden
@@ -83,8 +75,12 @@ export function parseVisibilityMarkers(document: vscode.TextDocument): Visibilit
   // opacity:0（不等价隐藏，但在调试时很常见）
   pushAll(/\bopacity\s*:\s*0\b/g, "hidden", "style: opacity:0");
 
-  // 5) 常见“显式可见”信号（少量）：display:block / inline / flex / grid / visibility:visible / opacity:1
-  pushAll(/\bdisplay\s*:\s*(block|inline|inline-block|flex|grid)\b/g, "visible", "style: display:*");
+  // 4) 常见“显式可见”信号（少量）：display:block / inline / flex / grid / visibility:visible / opacity:1
+  pushAll(
+    /\bdisplay\s*:\s*(block|inline|inline-block|flex|grid)\b/g,
+    "visible",
+    "style: display:*"
+  );
   pushAll(/\bvisibility\s*:\s*visible\b/g, "visible", "style: visibility:visible");
   pushAll(/\bopacity\s*:\s*1\b/g, "visible", "style: opacity:1");
 
