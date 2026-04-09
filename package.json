@@ -2,7 +2,7 @@
   "name": "vscode-footnote-highlight",
   "displayName": "APL Inspector",
   "description": "页面辅助检查面板：HTML 脚注、ARIA labels、图片 ALT、Hidden/Visible 快速定位（像素风 APL）。",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "SimonGu",
   "license": "MIT",
   "homepage": "https://github.com/simongu-mullenlowe/vscode-extension#readme",
