@@ -1,0 +1,88 @@
+{
+  "name": "vscode-footnote-highlight",
+  "displayName": "Footnote Highlight",
+  "description": "高亮脚注引用与定义，体验类似 Safari 脚注插件。",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onView:footnoteHighlight.list"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "footnoteHighlight",
+          "title": "脚注",
+          "icon": "media/footnote.svg"
+        }
+      ]
+    },
+    "views": {
+      "footnoteHighlight": [
+        {
+          "id": "footnoteHighlight.list",
+          "name": "脚注列表",
+          "contextualTitle": "脚注"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "footnoteHighlight.refresh",
+          "when": "view == footnoteHighlight.list",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "footnoteHighlight.reveal",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Footnote Highlight",
+      "properties": {
+        "footnoteHighlight.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否在 Markdown 中启用脚注高亮。"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "footnoteHighlight.refresh",
+        "title": "刷新",
+        "category": "脚注",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "footnoteHighlight.reveal",
+        "title": "跳转到脚注位置",
+        "category": "脚注"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --allow-missing-repository --skip-license"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.7.1",
+    "typescript": "^5.3.3"
+  }
+}
