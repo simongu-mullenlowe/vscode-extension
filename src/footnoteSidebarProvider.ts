@@ -12,6 +12,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
 
   private readonly disposables: vscode.Disposable[] = [];
   private treeView: vscode.TreeView<FootnoteTreeItem>;
+  private rootItems: FootnoteTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
     this.treeView = vscode.window.createTreeView("footnoteHighlight.list", {
@@ -35,6 +36,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
 
   refresh(): void {
     this.updateMessage();
+    this.rebuildCache();
     this._onDidChange.fire();
   }
 
@@ -50,6 +52,26 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
     } else {
       this.treeView.message = undefined;
     }
+  }
+
+  revealLabel(label: string): void {
+    const target = this.rootItems.find((i) => i.kind === "footnote" && i.entry.label === label);
+    if (!target) {
+      return;
+    }
+    void this.treeView.reveal(target, { select: true, focus: false, expand: true });
+  }
+
+  private rebuildCache(): void {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor || editor.document.languageId !== "markdown") {
+      this.rootItems = [];
+      return;
+    }
+    const document = editor.document;
+    this.rootItems = parseFootnoteModel(document).map(
+      (entry): FootnoteTreeItem => ({ kind: "footnote", entry, document })
+    );
   }
 
   getTreeItem(element: FootnoteTreeItem): vscode.TreeItem {
@@ -117,9 +139,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
     const document = editor.document;
 
     if (!element) {
-      return parseFootnoteModel(document).map(
-        (entry): FootnoteTreeItem => ({ kind: "footnote", entry, document })
-      );
+      return this.rootItems;
     }
 
     if (element.kind === "footnote") {

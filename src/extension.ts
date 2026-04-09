@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { FootnoteHighlighter } from "./footnoteHighlighter";
 import { FootnoteSidebarProvider } from "./footnoteSidebarProvider";
+import { parseFootnoteModel } from "./footnoteModel";
 
 let highlighter: FootnoteHighlighter | undefined;
 let sidebar: FootnoteSidebarProvider | undefined;
@@ -36,6 +37,29 @@ export function activate(context: vscode.ExtensionContext): void {
         editor.selection = new vscode.Selection(range.start, range.end);
       }
     )
+  );
+
+  context.subscriptions.push(
+    vscode.window.onDidChangeTextEditorSelection((e) => {
+      if (!sidebar) {
+        return;
+      }
+      const editor = e.textEditor;
+      if (editor.document.languageId !== "markdown") {
+        return;
+      }
+      const pos = editor.selection.active;
+      const entries = parseFootnoteModel(editor.document);
+      const focused = entries.find((en) => {
+        if (en.definitionLabelRange && en.definitionLabelRange.contains(pos)) {
+          return true;
+        }
+        return en.references.some((r) => r.contains(pos));
+      });
+      if (focused) {
+        sidebar.revealLabel(focused.label);
+      }
+    })
   );
 }
 

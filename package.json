@@ -56,6 +56,12 @@
           "type": "boolean",
           "default": true,
           "description": "是否在 Markdown 中启用脚注高亮。"
+        },
+        "footnoteHighlight.mode": {
+          "type": "string",
+          "enum": ["focus", "all"],
+          "default": "focus",
+          "description": "高亮模式：focus=光标停在哪个脚注就只高亮该组；all=高亮全篇所有脚注。"
         }
       }
     },
