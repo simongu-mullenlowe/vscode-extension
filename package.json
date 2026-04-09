@@ -18,7 +18,8 @@
     "onStartupFinished",
     "onView:footnoteHighlight.list",
     "onView:footnoteHighlight.aria",
-    "onView:footnoteHighlight.alt"
+    "onView:footnoteHighlight.alt",
+    "onView:footnoteHighlight.visibility"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -47,6 +48,11 @@
           "id": "footnoteHighlight.alt",
           "name": "Image Alts",
           "contextualTitle": "ALT"
+        },
+        {
+          "id": "footnoteHighlight.visibility",
+          "name": "Hidden / Visible",
+          "contextualTitle": "Visibility"
         }
       ]
     },
@@ -65,6 +71,11 @@
         {
           "command": "footnoteHighlight.refresh",
           "when": "view == footnoteHighlight.alt",
+          "group": "navigation"
+        },
+        {
+          "command": "footnoteHighlight.refresh",
+          "when": "view == footnoteHighlight.visibility",
           "group": "navigation"
         }
       ],
