@@ -4,6 +4,12 @@ import { FootnoteSidebarProvider } from "./footnoteSidebarProvider";
 import { parseFootnoteModel } from "./footnoteModel";
 import { AriaLabelSidebarProvider } from "./ariaLabelSidebarProvider";
 
+/**
+ * 扩展入口：
+ * - 初始化高亮逻辑与两个侧栏视图（脚注、ARIA Labels）
+ * - 注册命令（刷新、跳转）
+ * - 监听光标位置以实现“像 Safari 一样的 focus 联动”
+ */
 let highlighter: FootnoteHighlighter | undefined;
 let sidebar: FootnoteSidebarProvider | undefined;
 let ariaSidebar: AriaLabelSidebarProvider | undefined;
@@ -28,6 +34,7 @@ export function activate(context: vscode.ExtensionContext): void {
         start: { line: number; character: number },
         end: { line: number; character: number }
       ) => {
+        // 统一的“跳转并选中”能力，供树视图条目复用（脚注/ARIA 都用它）。
         const uri = vscode.Uri.parse(uriStr);
         const doc = await vscode.workspace.openTextDocument(uri);
         const editor = await vscode.window.showTextDocument(doc);
@@ -54,6 +61,7 @@ export function activate(context: vscode.ExtensionContext): void {
       }
       const pos = editor.selection.active;
       const entries = parseFootnoteModel(editor.document);
+      // focus 联动：如果光标停在某个 `[^id]` 或 `[^id]:` 上，则侧栏自动定位到该脚注条目。
       const focused = entries.find((en) => {
         if (en.definitionLabelRange && en.definitionLabelRange.contains(pos)) {
           return true;

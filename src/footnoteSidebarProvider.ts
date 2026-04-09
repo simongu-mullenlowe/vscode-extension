@@ -1,6 +1,12 @@
 import * as vscode from "vscode";
 import { parseFootnoteModel, type FootnoteEntry } from "./footnoteModel";
 
+/**
+ * 脚注侧栏 TreeDataProvider：
+ * - 根节点：每个脚注 label 一条
+ * - 子节点：定义 + 若干引用
+ * - 点击条目会跳转到文档对应位置
+ */
 type FootnoteTreeItem =
   | { kind: "footnote"; entry: FootnoteEntry; document: vscode.TextDocument }
   | { kind: "def"; entry: FootnoteEntry; document: vscode.TextDocument }
@@ -15,6 +21,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
   private rootItems: FootnoteTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
+    // `footnoteHighlight.list` 对应 package.json 里的 view id。
     this.treeView = vscode.window.createTreeView("footnoteHighlight.list", {
       treeDataProvider: this,
       showCollapseAll: true,
@@ -55,6 +62,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
   }
 
   revealLabel(label: string): void {
+    // 用于与编辑器 focus 联动：侧栏自动定位到当前脚注。
     const target = this.rootItems.find((i) => i.kind === "footnote" && i.entry.label === label);
     if (!target) {
       return;
@@ -69,6 +77,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
       return;
     }
     const document = editor.document;
+    // 缓存根节点，避免 getChildren() 每次都重复解析全文。
     this.rootItems = parseFootnoteModel(document).map(
       (entry): FootnoteTreeItem => ({ kind: "footnote", entry, document })
     );
@@ -167,6 +176,7 @@ export class FootnoteSidebarProvider implements vscode.TreeDataProvider<Footnote
 }
 
 function truncate(s: string, max: number): string {
+  // 侧栏空间有限，避免 description/tooltips 过长影响可读性。
   if (s.length <= max) {
     return s;
   }
@@ -174,6 +184,7 @@ function truncate(s: string, max: number): string {
 }
 
 function revealCommand(uri: vscode.Uri, range: vscode.Range): vscode.Command {
+  // 统一用 `footnoteHighlight.reveal`，避免每个条目重复写 open/reveal/select 逻辑。
   return {
     command: "footnoteHighlight.reveal",
     title: "跳转",

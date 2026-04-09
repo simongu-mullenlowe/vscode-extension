@@ -2,7 +2,11 @@ import * as vscode from "vscode";
 import { parseFootnoteModel } from "./footnoteModel";
 
 /**
- * 在 Markdown 中为脚注引用 [^id] 与定义 [^id]: 提供成对高亮（逻辑后续实现）。
+ * Markdown 脚注高亮控制器。
+ *
+ * 支持两种模式：
+ * - focus：光标停在某个脚注上时，仅高亮该脚注的所有引用与定义标签
+ * - all：高亮全文所有脚注引用与定义标签
  */
 export class FootnoteHighlighter implements vscode.Disposable {
   private readonly decorationRef: vscode.TextEditorDecorationType;
@@ -10,6 +14,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
   private disposables: vscode.Disposable[] = [];
 
   constructor() {
+    // 选择 VS Code 主题自带的 word highlight 色，保证深浅主题都“顺眼”。
     this.decorationRef = vscode.window.createTextEditorDecorationType({
       backgroundColor: new vscode.ThemeColor("editor.wordHighlightBackground"),
       rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
@@ -27,6 +32,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
     }
 
     this.disposables.push(
+      // 编辑器切换/文档变化/光标移动/配置变化都会触发重算（逻辑轻量，适合即时反馈）。
       vscode.window.onDidChangeActiveTextEditor(() => this.applyToActiveEditor()),
       vscode.workspace.onDidChangeTextDocument((e) => {
         if (e.document === vscode.window.activeTextEditor?.document) {
@@ -65,6 +71,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
     const entries = parseFootnoteModel(editor.document);
 
     if (mode === "all") {
+      // 全量高亮：直接展平 ranges。
       editor.setDecorations(
         this.decorationRef,
         entries.flatMap((e) => e.references)
@@ -79,6 +86,7 @@ export class FootnoteHighlighter implements vscode.Disposable {
     }
 
     const pos = editor.selection.active;
+    // focus 高亮：只在光标“命中”某个脚注引用或定义标签时生效。
     const focused = entries.find((e) => {
       if (e.definitionLabelRange && e.definitionLabelRange.contains(pos)) {
         return true;

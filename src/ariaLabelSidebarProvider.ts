@@ -1,6 +1,13 @@
 import * as vscode from "vscode";
 import { parseAriaLabels, type AriaLabelEntry } from "./ariaLabelModel";
 
+/**
+ * ARIA Labels 侧栏：
+ * - 扫描当前活动编辑器文档中的 `aria-label`
+ * - 以列表形式展示，点击后跳转并选中 label 的值
+ *
+ * 注：当前设计为“就地扫描活动文件”，不做跨文件索引，保证轻量与即时。
+ */
 type AriaTreeItem = { kind: "aria"; entry: AriaLabelEntry; document: vscode.TextDocument };
 
 export class AriaLabelSidebarProvider
@@ -14,6 +21,7 @@ export class AriaLabelSidebarProvider
   private items: AriaTreeItem[] = [];
 
   constructor(context: vscode.ExtensionContext) {
+    // `footnoteHighlight.aria` 对应 package.json 里的 view id。
     this.treeView = vscode.window.createTreeView("footnoteHighlight.aria", {
       treeDataProvider: this,
       showCollapseAll: false,
@@ -46,6 +54,7 @@ export class AriaLabelSidebarProvider
       return;
     }
     const document = editor.document;
+    // 解析器会尽量只抓“字面量”形式，避免误把表达式当作可显示文本。
     const labels = parseAriaLabels(document);
     this.items = labels.map((entry): AriaTreeItem => ({ kind: "aria", entry, document }));
   }
@@ -69,6 +78,7 @@ export class AriaLabelSidebarProvider
     const item = new vscode.TreeItem(truncate(label, 60), vscode.TreeItemCollapsibleState.None);
     item.iconPath = new vscode.ThemeIcon("tag");
     item.description = `L${entry.line + 1}`;
+    // tooltip 用 MarkdownString，且对内容转义，避免特殊字符破坏渲染。
     item.tooltip = new vscode.MarkdownString(`**aria-label**: ${escapeMd(entry.value)}\n\nL${entry.line + 1}`);
     item.command = {
       command: "footnoteHighlight.reveal",
@@ -99,6 +109,7 @@ export class AriaLabelSidebarProvider
 }
 
 function truncate(s: string, max: number): string {
+  // 侧栏条目过长会影响浏览体验；统一截断。
   if (s.length <= max) {
     return s;
   }
@@ -106,6 +117,7 @@ function truncate(s: string, max: number): string {
 }
 
 function escapeMd(s: string): string {
+  // 仅用于 tooltip 渲染，避免 Markdown 特殊字符产生非预期格式。
   return s.replace(/([\\\\`*_{}\\[\\]()#+\\-.!|>])/g, "\\\\$1");
 }
 

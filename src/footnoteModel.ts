@@ -1,5 +1,10 @@
 import * as vscode from "vscode";
 
+/**
+ * 单个脚注条目（按 label 聚合）：
+ * - 同一 label 可能在正文出现多次引用
+ * - 定义行最多取第一处（后续可扩展为“多定义提示”）
+ */
 export interface FootnoteEntry {
   label: string;
   references: vscode.Range[];
@@ -9,6 +14,11 @@ export interface FootnoteEntry {
   definitionBody: string;
 }
 
+/**
+ * 排序策略：
+ * - 优先按定义出现位置排序（更符合阅读习惯）
+ * - 没定义时退化到第一处引用位置
+ */
 function definitionSortPosition(entry: FootnoteEntry, document: vscode.TextDocument): number {
   if (entry.definitionLabelRange) {
     return document.offsetAt(entry.definitionLabelRange.start);
@@ -24,6 +34,7 @@ function definitionSortPosition(entry: FootnoteEntry, document: vscode.TextDocum
  */
 export function parseFootnoteModel(document: vscode.TextDocument): FootnoteEntry[] {
   const text = document.getText();
+  // label -> 聚合数据（引用 ranges、定义 range、定义正文预览）
   const byLabel = new Map<
     string,
     { references: vscode.Range[]; definitionLabelRange?: vscode.Range; definitionBody: string }
@@ -46,6 +57,7 @@ export function parseFootnoteModel(document: vscode.TextDocument): FootnoteEntry
 
   for (let i = 0; i < document.lineCount; i++) {
     const line = document.lineAt(i);
+    // 定义行：允许前导空白；只抓取“定义标签+冒号”及其后单行正文用于预览。
     const defMatch = /^\s*\[\^([^\]\s]+)\]:(.*)$/.exec(line.text);
     if (!defMatch) {
       continue;
