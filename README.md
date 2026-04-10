@@ -1,151 +1,88 @@
-# APL Inspector (VS Code Extension)
+# APL Inspector
 
-一个用于页面代码快速定位的 VS Code 扩展侧栏面板，包含 **HTML 脚注**、**ARIA labels**、**图片 ALT**、**Hidden/Visible** 等检查能力（也兼容 Markdown 风格脚注）。
+A VS Code **sidebar inspector** for navigating page-oriented code: **HTML footnotes**, **`aria-label`**, **image `alt`**, and common **hidden / visible** markers. Pixel-style **APL** activity bar branding. Markdown-style footnotes are supported as well.
 
-A VS Code sidebar inspector for quickly navigating page code signals such as **HTML footnotes**, **ARIA labels**, **image ALT**, and **Hidden/Visible** markers (also supports Markdown-style footnotes).
+## Features
 
-## 功能
+### Footnotes
 
-### 脚注（Footnotes）
+- **Focus highlight (default):** when the cursor is on a footnote reference or definition, only that footnote group is highlighted.
+- **Footnotes view:** lists footnote entries in the Activity Bar; click to jump.
 
-- **Focus 高亮（默认）**：当光标停在“同一条脚注”的引用或定义上时，仅高亮该脚注组。
-- **侧栏脚注列表**：在左侧活动栏「脚注」容器下展示脚注条目，点击可跳转到对应位置。
+Supported shapes:
 
-支持的脚注形态：
+- **HTML** (recommended for `.html` / `.inc`): references `href="#fn..."` / `#footnote...` / `#note...`; definitions `id="fn..."` / `footnote` / `note`.
+- **Markdown:** references `[^id]`, definitions `[^id]:`.
 
-- **HTML（推荐，适用于 `.html` / `.inc`）**
-  - 引用：`href="#fn..."` / `href="#footnote..."` / `href="#note..."`
-  - 定义：`id="fn..."` / `id="footnote..."` / `id="note..."`
-- **Markdown（兼容）**
-  - 引用：`[^id]`
-  - 定义：`[^id]:`
+### ARIA labels
 
-English:
+- Lists all `aria-label` values in the current file (typical HTML/JSX patterns).
+- Click an item to jump and select the attribute value.
 
-- **Focus highlight (default)**: when your cursor is on a footnote reference/definition, only highlight that footnote group.
-- **Footnotes sidebar**: shows footnote entries in the Activity Bar container, click to jump.
+### Image `alt`
 
-Supported formats:
-
-- **HTML (recommended, for `.html` / `.inc`)**
-  - References: `href="#fn..."` / `href="#footnote..."` / `href="#note..."`
-  - Definitions: `id="fn..."` / `id="footnote..."` / `id="note..."`
-- **Markdown (compatible)**
-  - References: `[^id]`
-  - Definitions: `[^id]:`
-
-### ARIA Labels
-
-- **侧栏列出当前文件全部 `aria-label`**（HTML/JSX 常见写法）。
-- 点击条目跳转并选中 `aria-label` 的值。
-
-English:
-
-- Lists all `aria-label` values in the current file (common HTML/JSX patterns).
-- Click an item to jump and select the label value.
-
-### Image Alts
-
-- **侧栏列出当前文件全部图片 `alt`**：
-  - Markdown：`![alt](url)`
-  - HTML/JSX：`<img ... alt=\"...\">` / `alt={'...'}` / `alt={`...`}`（仅字面量）
-- 点击条目跳转并选中 alt 文本。
-
-English:
-
-- Lists all image `alt` text in the current file:
-  - Markdown: `![alt](url)`
-  - HTML/JSX: `<img ... alt=\"...\">` / `alt={'...'}` / `alt={`...`}` (literals only)
-- Click an item to jump and select the alt text.
+- Lists image alt text: Markdown `![alt](url)`; HTML/JSX `<img alt="...">`, `alt={'...'}`, template literals where applicable.
+- Click to jump and select the alt string.
 
 ### Hidden / Visible
 
-- **侧栏按 Hidden / Visible 分组**列出当前文件里常见的“隐藏/可见”标记（静态扫描，便于定位）：
-  - Hidden：`class="visuallyhidden"` / `visually-hidden` / `sr-only`、`hidden`、`display:none`、`visibility:hidden`、`opacity:0`
-  - Visible：`display:block/inline/flex/grid`、`visibility:visible`、`opacity:1`
-- 点击条目跳转并选中对应片段。
+- Groups common visibility-related snippets (static scan): hidden patterns such as `visuallyhidden`, `sr-only`, `hidden`, `display:none`, etc.; visible patterns such as `display:flex`, `opacity:1`, etc.
+- Click to jump and select the match.
 
-English:
+## Usage
 
-- Groups common visibility markers found in the current file (static scan for quick navigation):
-  - Hidden: `class="visuallyhidden"` / `visually-hidden` / `sr-only`, `hidden`, `display:none`, `visibility:hidden`, `opacity:0`
-  - Visible: `display:block/inline/flex/grid`, `visibility:visible`, `opacity:1`
-- Click an item to jump and select the matched snippet.
+After install, open the **APL** icon in the Activity Bar:
 
-## 使用
+- **脚注列表** — footnotes
+- **ARIA Labels**
+- **Image Alts**
+- **Hidden / Visible**
 
-安装后，在左侧活动栏会出现「脚注」图标：
+Use **Refresh** in the view title (`APL Inspector: 刷新`).
 
-- **脚注列表**：展示脚注条目与引用/定义
-- **ARIA Labels**：展示 `aria-label` 列表
-- **Image Alts**：展示图片 `alt` 列表
-- **Hidden / Visible**：展示隐藏/可见标记分组
+## Settings
 
-右上角支持 **刷新**（命令：`APL Inspector: 刷新`）。
+Search **APL Inspector** in Settings:
 
-English:
+| Setting | Description |
+|--------|-------------|
+| `aplInspector.enabled` | Turn the extension on or off. |
+| `aplInspector.mode` | `focus` — highlight only the footnote group under the cursor; `all` — highlight every footnote in the file. |
 
-After installing, a **Footnote** icon appears in the Activity Bar:
-
-- **Footnotes**: footnote entries with references/definition
-- **ARIA Labels**: `aria-label` list
-- **Image Alts**: image `alt` list
-- **Hidden / Visible**: grouped visibility markers
-
-Use **Refresh** (command: `APL Inspector: 刷新`) from the view title actions.
-
-## 配置
-
-在设置中搜索 `APL Inspector`：
-
-- `aplInspector.enabled`：是否启用
-- `aplInspector.mode`：
-  - `focus`：光标命中脚注时，仅高亮该组
-  - `all`：高亮全文所有脚注引用/定义标签
-
-English:
-
-Search `APL Inspector` in Settings:
-
-- `aplInspector.enabled`: enable/disable
-- `aplInspector.mode`:
-  - `focus`: highlight only the current footnote group under cursor
-  - `all`: highlight all footnotes in the document
-
-## 开发
+## Development
 
 ```bash
 npm install
 npm run watch
 ```
 
-在 VS Code 中按 `F5` 运行「Extension Development Host」进行调试。
+Press **F5** to start the Extension Development Host.
 
-English:
-
-Press `F5` in VS Code to launch the **Extension Development Host**.
-
-## 打包（VSIX）
+## Build (VSIX)
 
 ```bash
 npm run package
 ```
 
-生成的 `.vsix` 可通过 VS Code/Cursor 的 “Install from VSIX…” 安装。
+Install the generated `.vsix` with **Install from VSIX…** in VS Code or Cursor.
 
-English:
+## Author & feedback
 
-The generated `.vsix` can be installed via “Install from VSIX…” in VS Code/Cursor.
+- **Simon Gu**
+- `simon.gu@mullenlowe.com`
 
-## 作者与反馈
+---
 
-- 作者：**Simon Gu**
-- 建议/反馈：`simon.gu@mullenlowe.com`
+## 简体中文
 
-English:
+**APL Inspector** 是 VS Code 侧栏检查工具：脚注、ARIA label、图片 `alt`、Hidden/Visible 等快速定位；活动栏为像素风 **APL** 图标。兼容 Markdown 脚注写法。
 
-## Author & Feedback
+**功能概要：** 脚注支持 Focus/全文高亮与列表跳转；ARIA / ALT / 可见性分组列表均可点击跳转选中。
 
-- Author: **Simon Gu**
-- Suggestions/feedback: `simon.gu@mullenlowe.com`
+**使用：** 安装后点击左侧 **APL**，在对应视图中查看；视图标题栏可 **刷新**。
 
+**设置：** `aplInspector.enabled` 开关；`aplInspector.mode` 选 `focus` 或 `all`。
+
+**开发与打包：** `npm install` → `npm run watch`；`npm run package` 生成 VSIX。
+
+**作者与反馈：** Simon Gu · `simon.gu@mullenlowe.com`

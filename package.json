@@ -1,8 +1,8 @@
 {
   "name": "vscode-footnote-highlight",
   "displayName": "APL Inspector",
-  "description": "页面辅助检查面板：HTML 脚注、ARIA labels、图片 ALT、Hidden/Visible 快速定位（像素风 APL）。",
-  "version": "0.0.7",
+  "description": "Sidebar inspector for footnotes, aria-label, image alt, and hidden/visible markers (APL pixel UI). 侧栏检查：脚注、ARIA、ALT、可见性。",
+  "version": "0.0.8",
   "publisher": "SimonGu",
   "license": "MIT",
   "homepage": "https://github.com/simongu-mullenlowe/vscode-extension#readme",
@@ -107,13 +107,13 @@
         "aplInspector.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "是否启用 APL Inspector 的高亮与侧栏功能。"
+          "description": "Enable APL Inspector highlights and sidebar views. 是否启用高亮与侧栏。"
         },
         "aplInspector.mode": {
           "type": "string",
           "enum": ["focus", "all"],
           "default": "focus",
-          "description": "脚注高亮模式：focus=光标命中脚注时只高亮该组；all=高亮全部脚注。"
+          "description": "Footnote highlight: focus = only the group under cursor; all = every footnote. 脚注高亮：focus 仅当前组，all 全文。"
         }
       }
     },
@@ -136,7 +136,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "gen:icon": "node tools/gen_icon_png.mjs",
-    "package": "npm run gen:icon && vsce package --allow-missing-repository --skip-license"
+    "package": "npm run compile && npm run gen:icon && npx @vscode/vsce package"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
