@@ -2,7 +2,7 @@
   "name": "vscode-footnote-highlight",
   "displayName": "APL Inspector",
   "description": "Sidebar inspector for footnotes, aria-label, image alt, and hidden/visible markers (APL pixel UI). 侧栏检查：脚注、ARIA、ALT、可见性。",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publisher": "SimonGu",
   "license": "MIT",
   "homepage": "https://github.com/simongu-mullenlowe/vscode-extension#readme",

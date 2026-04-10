@@ -76,7 +76,8 @@ export class VisibilitySidebarProvider
     }
     const total = this.hiddenItems.length + this.visibleItems.length;
     if (total === 0) {
-      this.treeView.message = "当前文件未发现常见的 hidden/visible 标记（hidden、aria-hidden、display:none 等）。";
+      this.treeView.message =
+        "当前文件未发现常见的 hidden/visible 标记（visuallyhidden、hidden、display:none 等）。";
     } else {
       this.treeView.message = undefined;
     }
@@ -94,13 +95,14 @@ export class VisibilitySidebarProvider
     }
 
     const { entry, document } = element;
-    const label = entry.reason;
-    const item = new vscode.TreeItem(truncate(label, 64), vscode.TreeItemCollapsibleState.None);
+    const label = entry.displayText ?? entry.reason;
+    const item = new vscode.TreeItem(truncate(label, 72), vscode.TreeItemCollapsibleState.None);
     item.iconPath = new vscode.ThemeIcon(entry.kind === "hidden" ? "eye-closed" : "eye");
     item.description = `L${entry.line + 1}`;
-    item.tooltip = new vscode.MarkdownString(
-      `**${entry.kind.toUpperCase()}**: ${escapeMd(entry.reason)}\n\nL${entry.line + 1}`
-    );
+    const tipBody = entry.displayText
+      ? `${escapeMd(entry.displayText)}\n\n_${escapeMd(entry.reason)}_`
+      : escapeMd(entry.reason);
+    item.tooltip = new vscode.MarkdownString(`**${entry.kind.toUpperCase()}**: ${tipBody}\n\nL${entry.line + 1}`);
     item.command = {
       command: "aplInspector.reveal",
       title: "跳转",

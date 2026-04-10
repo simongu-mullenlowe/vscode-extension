@@ -26,8 +26,8 @@ Supported shapes:
 
 ### Hidden / Visible
 
-- Groups common visibility-related snippets (static scan): hidden patterns such as `visuallyhidden`, `sr-only`, `hidden`, `display:none`, etc.; visible patterns such as `display:flex`, `opacity:1`, etc.
-- Click to jump and select the match.
+- For `<span class="visuallyhidden">` (also `visually-hidden`, `sr-only`, and `className` in JSX), the list shows the **text inside the span** (e.g. “现有银色…”); click to jump and select that inner text.
+- Other hidden/visible snippets (static scan): `hidden`, `display:none`, `visibility:hidden`, `opacity:0`; visible: `display:flex`, `opacity:1`, etc.
 
 ## Usage
 
@@ -77,7 +77,7 @@ Install the generated `.vsix` with **Install from VSIX…** in VS Code or Cursor
 
 **APL Inspector** 是 VS Code 侧栏检查工具：脚注、ARIA label、图片 `alt`、Hidden/Visible 等快速定位；活动栏为像素风 **APL** 图标。兼容 Markdown 脚注写法。
 
-**功能概要：** 脚注支持 Focus/全文高亮与列表跳转；ARIA / ALT / 可见性分组列表均可点击跳转选中。
+**功能概要：** 脚注支持 Focus/全文高亮与列表跳转；ARIA / ALT 列表可点击跳转选中；**`<span class="visuallyhidden">` 等会在侧栏显示元素内文字**并跳转选中该段文字；其它 hidden/visible 规则见英文 Features。
 
 **使用：** 安装后点击左侧 **APL**，在对应视图中查看；视图标题栏可 **刷新**。
 

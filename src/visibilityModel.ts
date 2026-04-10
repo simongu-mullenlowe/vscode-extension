@@ -10,6 +10,8 @@ export interface VisibilityEntry {
   reason: string;
   range: vscode.Range;
   line: number;
+  /** 侧栏主文案：如 visuallyhidden 元素内的纯文本 */
+  displayText?: string;
 }
 
 const MAX_SCAN_CHARS = 800_000;
@@ -33,39 +35,13 @@ export function parseVisibilityMarkers(document: vscode.TextDocument): Visibilit
   const hiddenAttr = /\bhidden\b/g;
   pushAll(hiddenAttr, "hidden", "attribute: hidden");
 
-  // 2) visually hidden class（常见可访问性写法）
-  // 支持：class="... visuallyhidden ..." / class='... visually-hidden ...' / class={"..."}
-  // 这里不做完整 class 解析，只做足够稳定的静态定位。
-  pushAll(
-    /\bclass\s*=\s*(["'])(?:(?!\1).)*\bvisuallyhidden\b(?:(?!\1).)*\1/gi,
-    "hidden",
-    "class: visuallyhidden"
-  );
-  pushAll(
-    /\bclass\s*=\s*(["'])(?:(?!\1).)*\bvisually-hidden\b(?:(?!\1).)*\1/gi,
-    "hidden",
-    "class: visually-hidden"
-  );
-  pushAll(
-    /\bclass\s*=\s*(["'])(?:(?!\1).)*\bsr-only\b(?:(?!\1).)*\1/gi,
-    "hidden",
-    "class: sr-only"
-  );
-  pushAll(
-    /\bclassName\s*=\s*(["'])(?:(?!\1).)*\bvisuallyhidden\b(?:(?!\1).)*\1/gi,
-    "hidden",
-    "className: visuallyhidden"
-  );
-  pushAll(
-    /\bclassName\s*=\s*(["'])(?:(?!\1).)*\bvisually-hidden\b(?:(?!\1).)*\1/gi,
-    "hidden",
-    "className: visually-hidden"
-  );
-  pushAll(
-    /\bclassName\s*=\s*(["'])(?:(?!\1).)*\bsr-only\b(?:(?!\1).)*\1/gi,
-    "hidden",
-    "className: sr-only"
-  );
+  // 2) `<span class="visuallyhidden">...</span>`：抓取内部文本，侧栏展示文案，跳转选中内部文本。
+  extractVisuallyHiddenSpanContent(document, text, results, "class", "visuallyhidden");
+  extractVisuallyHiddenSpanContent(document, text, results, "class", "visually-hidden");
+  extractVisuallyHiddenSpanContent(document, text, results, "class", "sr-only");
+  extractVisuallyHiddenSpanContent(document, text, results, "className", "visuallyhidden");
+  extractVisuallyHiddenSpanContent(document, text, results, "className", "visually-hidden");
+  extractVisuallyHiddenSpanContent(document, text, results, "className", "sr-only");
 
   // 3) inline style 常见隐藏信号（HTML/JSX 字面量）
   // display:none
@@ -103,6 +79,54 @@ export function parseVisibilityMarkers(document: vscode.TextDocument): Visibilit
       const end = document.positionAt(m.index + m[0].length);
       results.push({ kind, reason, range: new vscode.Range(start, end), line: start.line });
     }
+  }
+}
+
+function stripInnerTags(s: string): string {
+  return s.replace(/<[^>]+>/g, " ");
+}
+
+/**
+ * 匹配 `<span class="...visuallyhidden...">内部文本</span>`（及 className / visually-hidden / sr-only），
+ * 侧栏展示内部纯文本，range 指向内部文本（trim 后）便于选中复制。
+ */
+function extractVisuallyHiddenSpanContent(
+  document: vscode.TextDocument,
+  text: string,
+  results: VisibilityEntry[],
+  attr: "class" | "className",
+  token: string
+): void {
+  const attrRe = attr === "class" ? "class" : "className";
+  const escapedToken = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(
+    `<span\\b[^>]*\\b${attrRe}\\s*=\\s*["'][^"']*\\b${escapedToken}\\b[^"']*["'][^>]*>([\\s\\S]*?)<\\/span>`,
+    "gi"
+  );
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    const full = m[0];
+    const innerRaw = m[1];
+    const innerStartInFull = full.indexOf(innerRaw);
+    const baseOffset = m.index + innerStartInFull;
+    const leading = innerRaw.length - innerRaw.trimStart().length;
+    const trimmed = innerRaw.trim();
+    if (trimmed.length === 0) {
+      continue;
+    }
+    const startOffset = baseOffset + leading;
+    const endOffset = startOffset + trimmed.length;
+    const start = document.positionAt(startOffset);
+    const end = document.positionAt(endOffset);
+    const plain = stripInnerTags(trimmed).replace(/\s+/g, " ").trim();
+    const display = plain || trimmed;
+    results.push({
+      kind: "hidden",
+      reason: `visually hidden (${token})`,
+      range: new vscode.Range(start, end),
+      line: start.line,
+      displayText: display,
+    });
   }
 }
 
